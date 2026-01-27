@@ -1,9 +1,17 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import LogoutModal from "../components/LogoutModal";
+import { useState } from "react";
+
 
 export default function Dashboard() {
   const navigate = useNavigate();
+    const [openLogout, setOpenLogout] = useState(false);
+
+     const handleLogout = () => {
+    navigate("/"); // redirect to login
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -26,6 +34,21 @@ export default function Dashboard() {
           >
             View Orders
           </button>
+          <br />
+
+          <button
+        onClick={() => setOpenLogout(true)}
+        className="w-48 bg-red-500 text-white py-3 rounded-lg shadow-md hover:bg-red-600 transition"
+      >
+        Logout
+      </button>
+
+      {/* Logout Confirmation Modal */}
+      <LogoutModal
+        isOpen={openLogout}
+        onClose={() => setOpenLogout(false)}
+        onLogout={handleLogout}
+      />
         </div>
       </div>
     </div>

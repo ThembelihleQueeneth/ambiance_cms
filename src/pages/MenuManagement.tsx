@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Header from "../components/Header";
 import AddItemModal from "../components/AddItemModal";
 import api from "../services/api";
