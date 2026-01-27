@@ -1,86 +1,92 @@
-import React from "react";
+import React, { useState } from "react";
+import api from "../services/api";
 
-type AddItemModalProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
+  onItemAdded: () => void;
 };
 
-export default function AddItemModal({ isOpen, onClose }: AddItemModalProps) {
+export default function AddItemModal({ isOpen, onClose, onItemAdded }: Props) {
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      {/* Modal Card */}
-      <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6 relative">
-        
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl"
-        >
-          ✕
-        </button>
+  const handleSubmit = async () => {
+    if (!name || !price || !imageUrl) {
+      alert("Name, price and image are required");
+      return;
+    }
 
-        <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">
+    try {
+      setLoading(true);
+      await api.post("/items", {
+        name,
+        price,
+        description,
+        image_url: imageUrl,
+      });
+
+      onItemAdded();
+      onClose();
+    } catch (error) {
+      alert("Failed to add item");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-xl w-full max-w-md shadow-lg">
+        <h2 className="text-lg font-semibold mb-4 text-center">
           Add Menu Item
         </h2>
 
-        {/* Item Name */}
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Item Name
-        </label>
         <input
-          type="text"
-          placeholder="Enter item name"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-400 outline-none mb-4"
+          className="w-full mb-3 px-4 py-2 border rounded-lg"
+          placeholder="Item name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
 
-        {/* Item Price */}
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Item Price (R)
-        </label>
         <input
+          className="w-full mb-3 px-4 py-2 border rounded-lg"
           type="number"
-          placeholder="Enter item price"
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-400 outline-none mb-4"
+          placeholder="Price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
         />
 
-        {/* Item Description */}
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Item Description
-        </label>
         <textarea
-          placeholder="Enter item description"
-          rows={3}
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-orange-400 outline-none mb-4 resize-none"
+          className="w-full mb-3 px-4 py-2 border rounded-lg"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
         />
 
-        {/* Item Image */}
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Item Image
-        </label>
         <input
-          type="file"
-          className="w-full text-sm text-gray-600 mb-6
-            file:mr-4 file:py-2 file:px-4
-            file:rounded-lg file:border-0
-            file:bg-orange-500 file:text-white
-            hover:file:bg-orange-600"
+          className="w-full mb-4 px-4 py-2 border rounded-lg"
+          placeholder="Image URL"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
         />
 
-        {/* Actions */}
         <div className="flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100"
-          >
+          <button onClick={onClose} className="px-4 py-2 border rounded-lg">
             Cancel
           </button>
 
           <button
-            className="px-4 py-2 rounded-lg bg-orange-500 text-white hover:bg-orange-600 transition"
+            onClick={handleSubmit}
+            disabled={loading}
+            className="px-4 py-2 bg-orange-500 text-white rounded-lg"
           >
-            Save Item
+            {loading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
