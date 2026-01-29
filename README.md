@@ -1,73 +1,160 @@
-# React + TypeScript + Vite
+# 🍽️ Ambiance CMS (Admin Panel)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ambiance CMS is a **full-stack restaurant content management system** designed to help administrators manage menu items and customer orders efficiently. The system provides a clean admin dashboard, full CRUD functionality for menu items, and is built using modern web technologies.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+### Admin Dashboard
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* Central admin landing page
+* Quick navigation to Menu Management and Orders
+* Secure logout with confirmation modal
 
-## Expanding the ESLint configuration
+### Menu Management
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* View all menu items in a modern card layout
+* Add new menu items
+* Edit existing menu items
+* Delete menu items
+* Image support via image URLs
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Orders (Planned / In Progress)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* View customer orders
+* Track order status
+* Future support for order metrics and analytics
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+##  Screenshots
+
+### Admin Dashboard
+
+<img width="1920" height="1080" alt="Dashboard" src="https://github.com/user-attachments/assets/6f749603-bb05-4dd9-9efa-4282cfc01256" />
+
+
+### Menu Management
+<img width="1920" height="1080" alt="ManageMenu" src="https://github.com/user-attachments/assets/02a6bc59-bcab-43ad-8547-9a3425c4d9fd" />
+
+### Login
+
+![Uploading Login.png…]()
+
+---
+
+
+##  Tech Stack
+
+### Frontend
+
+* **React** (with TypeScript)
+* **React Router DOM** – navigation
+* **Tailwind CSS** – styling
+* **Axios** – API requests
+
+### Backend
+
+* **Node.js**
+* **Express.js**
+* **TypeScript**
+
+### Database
+
+* **PostgreSQL**
+
+---
+
+## Project Structure
+
+```
+ambiance-cms/               
+│── components/                 # React frontend
+│── pages/
+│── services/
+│── App.tsx
+│
+├── ambiance-api/                # Node.js backend
+│   ├── routes/
+│   ├── controllers/
+│   ├── db/
+│   └── index.ts
+│
+└── README.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+##  Installation & Setup
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1️⃣ Clone the Repository
+
+```bash
+git clone [https://github.com/your-username/ambiance-cms.git](https://github.com/ThembelihleQueeneth/ambiance_cms.git)
+cd ambiance-cms
 ```
+
+---
+
+### 2️⃣ Backend Setup (Node + PostgreSQL)
+
+```bash
+cd ambiance-api
+npm install
+```
+
+Create a `.env` file:
+
+```env
+PORT=3000
+DB_HOST=localhost
+DB_USER=postgres
+DB_PASSWORD=123456
+DB_NAME=ambiance_db
+```
+
+Run the server:
+
+```bash
+npm run dev
+```
+
+---
+
+### 3️⃣ Frontend Setup (React)
+
+```bash
+cd ambiance_cms
+npm install
+npm run dev
+```
+
+Frontend runs on:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🔗 API Endpoints
+
+### Menu Items
+
+| Method | Endpoint   | Description     |
+| ------ | ---------- | --------------- |
+| GET    | /items     | Fetch all items |
+| POST   | /items     | Add new item    |
+| PUT    | /items/:id | Update item     |
+| DELETE | /items/:id | Delete item     |
+
+
+---
+
+##  Author
+
+**Thembelihle Maluka**
+Junior Software Developer
+
+
