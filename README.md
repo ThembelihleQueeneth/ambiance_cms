@@ -107,7 +107,7 @@ npm install
 Create a `.env` file:
 
 ```env
-PORT=3000
+PORT=5000
 DB_HOST=localhost
 DB_USER=postgres
 DB_PASSWORD=123456
