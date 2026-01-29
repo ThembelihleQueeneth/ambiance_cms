@@ -1,43 +1,65 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../services/api";
+
+type Item = {
+  id: number;
+  name: string;
+  price: number;
+  description?: string;
+  image_url: string;
+};
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onItemAdded: () => void;
+  onItemUpdated: () => void;
+  item: Item | null;
 };
 
-export default function AddItemModal({ isOpen, onClose, onItemAdded }: Props) {
+export default function EditItemModal({
+  isOpen,
+  onClose,
+  onItemUpdated,
+  item,
+}: Props) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-    const [category, setCategory] = useState("");
-
   const [loading, setLoading] = useState(false);
 
-  if (!isOpen) return null;
+  // Prefill when item changes
+  useEffect(() => {
+    if (item) {
+      setName(item.name);
+      setPrice(item.price.toString());
+      setDescription(item.description || "");
+      setImageUrl(item.image_url);
+    }
+  }, [item]);
+
+  if (!isOpen || !item) return null;
 
   const handleSubmit = async () => {
-    if (!name || !price || !imageUrl ) {
+    if (!name || !price || !imageUrl) {
       alert("Name, price and image are required");
       return;
     }
 
     try {
       setLoading(true);
-      await api.post("/items", {
+
+      await api.put(`/items/${item.id}`, {
         name,
         price,
         description,
         image_url: imageUrl,
-        category,
       });
 
-      onItemAdded();
+      onItemUpdated();
       onClose();
     } catch (error) {
-      alert("Failed to add item");
+      alert("Failed to update item");
     } finally {
       setLoading(false);
     }
@@ -47,7 +69,7 @@ export default function AddItemModal({ isOpen, onClose, onItemAdded }: Props) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-xl w-full max-w-md shadow-lg">
         <h2 className="text-lg font-semibold mb-4 text-center">
-          Add Menu Item
+          Edit Menu Item
         </h2>
 
         <input
@@ -78,12 +100,6 @@ export default function AddItemModal({ isOpen, onClose, onItemAdded }: Props) {
           value={imageUrl}
           onChange={(e) => setImageUrl(e.target.value)}
         />
-        <input
-          className="w-full mb-4 px-4 py-2 border rounded-lg"
-          placeholder="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
 
         <div className="flex justify-end gap-3">
           <button onClick={onClose} className="px-4 py-2 border rounded-lg">
@@ -95,7 +111,7 @@ export default function AddItemModal({ isOpen, onClose, onItemAdded }: Props) {
             disabled={loading}
             className="px-4 py-2 bg-orange-500 text-white rounded-lg"
           >
-            {loading ? "Saving..." : "Save"}
+            {loading ? "Updating..." : "Update"}
           </button>
         </div>
       </div>
