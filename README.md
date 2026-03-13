@@ -104,6 +104,10 @@ cd ambiance-api
 npm install
 ```
 
+---
+### To Login use these credentials
+    ``` Admin Email : ambiance@gmail.com || Password === 12345 ```
+
 Create a `.env` file:
 
 ```env
