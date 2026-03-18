@@ -12,7 +12,7 @@ export default function AddItemModal({ isOpen, onClose, onItemAdded }: Props) {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-    const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -26,76 +26,111 @@ export default function AddItemModal({ isOpen, onClose, onItemAdded }: Props) {
 
     try {
       setLoading(true);
-      await api.post("/items", {
+      const payload: any = {
         name,
-        price,
+        price: parseFloat(price),
         description,
         image_url: imageUrl,
-        category,
-      });
+      };
+      
+      if (category.trim()) {
+        payload.category = category.trim();
+      }
+
+      await api.post("/items", payload);
 
       onItemAdded();
+      
+      // Reset form
+      setName("");
+      setPrice("");
+      setDescription("");
+      setImageUrl("");
+      setCategory("");
+      
       onClose();
-    } catch (error) {
-      alert("Failed to add item");
+    } catch (error: any) {
+      alert(error.response?.data?.error || "Failed to add item");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-xl w-full max-w-md shadow-lg">
-        <h2 className="text-lg font-semibold mb-4 text-center">
-          Add Menu Item
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity">
+      <div className="bg-white p-8 rounded-2xl w-full max-w-md shadow-2xl transform transition-all">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+          Add New Menu Item
         </h2>
 
-        <input
-          className="w-full mb-3 px-4 py-2 border rounded-lg"
-          placeholder="Item name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Item Name *</label>
+            <input
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+              placeholder="e.g. Classic Burger"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
 
-        <input
-          className="w-full mb-3 px-4 py-2 border rounded-lg"
-          type="number"
-          placeholder="Price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Price (R) *</label>
+              <input
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                type="number"
+                placeholder="0.00"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <input
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+                placeholder="e.g. Mains, Drinks"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              />
+            </div>
+          </div>
 
-        <textarea
-          className="w-full mb-3 px-4 py-2 border rounded-lg"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition resize-none h-24"
+              placeholder="Briefly describe the item..."
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
 
-        <input
-          className="w-full mb-4 px-4 py-2 border rounded-lg"
-          placeholder="Image URL"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
-        <input
-          className="w-full mb-4 px-4 py-2 border rounded-lg"
-          placeholder="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL *</label>
+            <input
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition"
+              placeholder="https://example.com/image.jpg"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+          </div>
+        </div>
 
-        <div className="flex justify-end gap-3">
-          <button onClick={onClose} className="px-4 py-2 border rounded-lg">
+        <div className="flex justify-end gap-3 mt-8">
+          <button 
+            onClick={onClose} 
+            className="px-5 py-2 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition duration-300"
+          >
             Cancel
           </button>
 
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="px-4 py-2 bg-orange-500 text-white rounded-lg"
+            className="px-5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition duration-300 disabled:opacity-50"
           >
-            {loading ? "Saving..." : "Save"}
+            {loading ? "Saving..." : "Save Item"}
           </button>
         </div>
       </div>
