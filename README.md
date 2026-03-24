@@ -121,7 +121,7 @@ DB_NAME=ambiance_db
 Run the server:
 
 ```bash
-npm run dev
+npx ts-node-dev src/server.ts
 ```
 
 ---
