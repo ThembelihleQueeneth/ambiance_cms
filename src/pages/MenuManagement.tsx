@@ -42,7 +42,7 @@ export default function MenuManagement() {
 
       {/* Page Header / Banner */}
       <div className="max-w-6xl mx-auto p-6">
-        <div className="flex justify-between items-center mb-8 bg-white p-5 rounded-xl shadow-md border-l-4 border-orange-500 w-full overflow-hidden">
+        <div className="flex justify-between items-center mb-8 bg-white p-5 rounded-xl shadow-md w-full overflow-hidden">
           <h1 className="text-3xl font-bold text-gray-800 tracking-tight">Menu Management</h1>
           <button
             onClick={() => setIsAddOpen(true)}
